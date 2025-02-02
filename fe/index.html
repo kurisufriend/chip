@@ -2,13 +2,103 @@
 
 <head>
 <title>chip da rippa</title>
+<style>
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+th {
+    background-color: #f0f0f0;
+    text-align: center;
+}
+</style>
 </head>
 
 <body>
 <h1>cdr (legally distinct from jtr)</h1>
 
-
+<table id="nodes">
+<noscript>you need javascript</noscript> 
+</table>
 
 </body>
+<script>
+backend = "ws://localhost:1337"
 
+let ws = new WebSocket(backend)
+
+ws.addEventListener('open', (event) => {
+    console.log('connected');
+    ws.send(JSON.stringify(
+        {
+            "type": "checkin/fe",
+            "data": {}
+        }
+    ));
+});
+
+ws.addEventListener('message', (event) => {
+    console.log('>>', event.data);
+    let j = JSON.parse(event.data);
+    if (j["type"] == "state")
+    {
+        const nodes = j.data.map((node) => ({
+            id: 0,
+            hostname: node.hostname,
+            tray_status: node.diskinfo.data.open,
+            barcode: node.diskinfo.data.title,
+            rip_status: node.ripstatus,
+        }));
+
+        updateTable(nodes);
+    }
+});
+
+ws.addEventListener('close', (event) => {
+    console.log('closed');
+});
+
+ws.addEventListener('error', (error) => {
+    console.error(error);
+});
+
+const table = document.getElementById('nodes');
+
+function updateTable(data) {
+    table.innerHTML = '<tr>\
+<th>#</th>\
+<th>hostname</th>\
+<th>tray status</th>\
+<th>barcode</th>\
+<th>rip status</th>\
+</tr>';
+
+    data.forEach((node) => {
+        let row = table.insertRow();
+        
+        let id = row.insertCell();
+        id.textContent = node['id'];
+
+        let hostname = row.insertCell();
+        hostname.textContent = node['hostname'];
+
+        let tray_status = row.insertCell();
+        tray_status.textContent = node['tray_status'];
+
+        let barcode = row.insertCell();
+        barcode.textContent = node['barcode'];
+
+        let rip_status = row.insertCell();
+        rip_status.textContent = node['rip_status'];
+    });
+}
+
+
+
+</script>
 </html>

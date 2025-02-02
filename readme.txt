@@ -5,3 +5,5 @@ appropriate documentation is in the (quite sizeable) schizobabble header comment
 werking notez:
 - idk how to nfs mount alex. idk if i even can. def can't sshfs outside my homedir and
    dept/it. bother emachine for root and/or passwd for user `ripperjack'.
+- todo
+   - swap whipper.conf loc to github repo

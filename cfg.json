@@ -1,9 +1,8 @@
 {
     "vvv the stuff you need to edit to get shit werking vvv": 0,
-    "master-fqdn": "the ip or fqdn of the master node",
+    "master-fqdn": "localhost",
 
 
     "vvv the stuff that's probably fine the way it is": 0,
-    "master-ws-port": 80,
-    "master-http-port": 6969
+    "master-ws-port": 1337
 }
