@@ -147,6 +147,7 @@ if not os.path.exists("/root/.config/whipper/whipper.conf"):
 # mind to the drive
 async def handle_drive(ws):
     while True:
+        await ws.send(json.dumps(diskinfo()))
         await asyncio.sleep(1)
         # tray closed w nothing in
         if get_drive_status() == "empty":
@@ -162,7 +163,6 @@ async def handle_drive(ws):
             continue
 
         # => we got an unripped disk.
-        await ws.send(json.dumps(diskinfo()))
         await rip(ws)
 
 
