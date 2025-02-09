@@ -163,7 +163,7 @@ async def handle_drive(ws):
 
         # => we got an unripped disk.
         await ws.send(json.dumps(diskinfo()))
-        #await rip()
+        await rip()
 
 
 # event loop
