@@ -132,12 +132,12 @@ async def rip():
 
 
 # pull chip cfg
-with open("cfg.json", "r") as f:
+with open("/mnt/chip/cfg.json", "r") as f:
     cfg = json.loads(f.read())
 
 # assert whipper cfg exists
-if not os.path.exists("/home/wuvt/.config/whipper/whipper.conf"):
-    os.makedirs("/home/wuvt/.config/whipper", exist_ok=True)
+if not os.path.exists("/root/.config/whipper/whipper.conf"):
+    os.makedirs("/root/.config/whipper", exist_ok=True)
     urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf")
 
 
