@@ -158,6 +158,7 @@ async def fuck():
     print("semt")
     while True:
         time.sleep(1)
+        print("not blocking " + time.ctime())
         # tray closed w nothing in
         if get_drive_status() == "empty":
             drive_open()
