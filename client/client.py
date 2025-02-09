@@ -138,7 +138,7 @@ with open("cfg.json", "r") as f:
 # assert whipper cfg exists
 #if not os.path.exists("/home/wuvt/.config/whipper/whipper.conf"):
 #    os.makedirs("/home/wuvt/.config/whipper", exist_ok=True)
-#    urllib.request.urlretrieve("https://vtluug.org/users/~rsk/files/ripper/whipper.conf", "/home/wuvt/.config/whipper/whipper.conf")
+#    urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf")
 
 
 # event loop

@@ -1,4 +1,4 @@
-import os
+import os, json
 
 manifest = []
 
@@ -28,3 +28,11 @@ manifest += f"curl {link} > /etc/systemd/system/chip-client.service"
 manifest += "systemctl daemon-reload"
 manifest += "systemctl enable chip-client.service"
 manifest += "systemctl start chip-client.service"
+
+
+
+with open("nodes.json", "r") as f:
+    nodes = json.loads(f.read())
+    for n in nodes:
+        for cmd in manifest:
+            os.system(f"ssh root@{n['ipv6']} \"f{cmd}\"")
