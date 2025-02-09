@@ -21,8 +21,8 @@ manifest.append("apt install -y " + " ".join(pkgs))
 
 manifest.append("mkdir -p /mnt/chip")
 # idempotent as heck
-manifest.append("(crontab -l ; echo \"@reboot sshfs /mnt/chip/ chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip\") | crontab -")
-manifest.append("(crontab -l ; echo \"*/1 * * * * if [ ! -d /mnt/chip/tools ]; then sshfs /mnt/chip/ chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip; fi\") | crontab -")
+manifest.append("(echo \\\"@reboot sshfs /mnt/chip/ chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip -o IdentityFile=/root/.ssh/saya-whoreslayer-node\\\") | crontab -")
+manifest.append("(crontab -l; echo \\\"*/1 * * * * [ -d /mnt/chip/tools ] || sshfs /mnt/chip/ chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip -o IdentityFile=/root/.ssh/saya-whoreslayer-node\\\") | crontab -")
 
 # install systemd service (re-installs every time: idempotent by default)
 link = "https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/service/chip-client.service"
