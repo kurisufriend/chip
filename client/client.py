@@ -124,13 +124,12 @@ async def rip(ws):
     acc = ""
     while not process.stdout.at_eof():
         newc = await process.stdout.read(1)
-        time.sleep(.01)
+        await asyncio.sleep(.01)
         if not newc:
             break
         acc += newc.decode("latin-1")
         if "\r" in acc:
             print(acc)
-            acc = ""
             await ws.send(json.dumps({"type": "liverip", "data": {"stdout": acc, "stderr": ""}}))
 
 
