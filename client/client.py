@@ -90,6 +90,10 @@ deployment:
 
 import requests, subprocess, os, urllib, websockets, time, hashlib, json, asyncio
 
+if not os.path.exists("/mnt/chip/tools"):
+    print("mount not active, sleeping 10s...")
+    time.sleep(10)
+
 
 def get_drive_status():
     stat = subprocess.run("setcd -i /dev/sr0", shell=True, capture_output=True, text=True)
