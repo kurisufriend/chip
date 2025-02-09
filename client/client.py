@@ -148,6 +148,7 @@ if not os.path.exists("/root/.config/whipper/whipper.conf"):
 async def handle_drive(ws):
     while True:
         await asyncio.sleep(1)
+        print("a")
         # tray closed w nothing in
         if get_drive_status() == "empty":
             drive_open()
