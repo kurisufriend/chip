@@ -142,7 +142,7 @@ with open("/mnt/chip/cfg.json", "r") as f:
 # assert whipper cfg exists
 if not os.path.exists("/root/.config/whipper/whipper.conf"):
     os.makedirs("/root/.config/whipper", exist_ok=True)
-    urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf")
+    urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf", filename="/root/.config/whipper/whipper.conf")
 
 # mind to the drive
 async def handle_drive(ws):
