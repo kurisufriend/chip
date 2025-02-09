@@ -148,7 +148,7 @@ if not os.path.exists("/root/.config/whipper/whipper.conf"):
 # event loop
 async def fuck():
     # checkin
-    ws = await websockets.connect("ws://"+cfg["master-fqdn"]+":"+str(cfg["master-ws-port"]))
+    ws = await websockets.connect("ws://"+cfg["master-fqdn"]+":"+str(cfg["master-ws-port"]), ping_timeout=30, close_timeout=40)
     hostname = subprocess.check_output("hostname", shell=True).decode("latin-1").strip()
     await ws.send(json.dumps({"type": "checkin/client", "data": {
         "hostname": hostname,
