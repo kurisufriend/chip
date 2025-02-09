@@ -118,7 +118,7 @@ def diskinfo():
     return {"type": "diskinfo", "data": {"open": get_drive_status(), "title": disk_id()}}
 
 async def rip(ws):
-    cmd = ["whipper", "cd", "rip", "-O", "/mnt/chip/ripz/" + disk_id()]
+    cmd = ["whipper", "cd", "rip", "--cdr", "-U", "-O", "/mnt/chip/ripz/" + disk_id()]
     process = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE)
 
     acc = ""
