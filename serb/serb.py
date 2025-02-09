@@ -63,7 +63,7 @@ class serb():
                 print("new FE")
                 continue
 
-            print("FROM " + self.clients[ws.remote_address]["hostname"] + json.dumps(j, indent=2))
+            print(time.ctime() + " // FROM " + self.clients[ws.remote_address]["hostname"] + json.dumps(j, indent=2))
 
     async def wsh_checkin_client(self, ws, message):
         self.clients[ws.remote_address] = {"hostname": message["data"]["hostname"]}
