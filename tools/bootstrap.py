@@ -9,7 +9,7 @@ if not os.getenv("CHIP_PASS"):
     sys.exit(1)
 
 # run as root
-if subprocess.check_output(["whoami"]) != "root":
+if subprocess.check_output(["whoami"]).decode("ascii").replace("\n", "") != "root":
     print("run as root")
     sys.exit(2)
 
