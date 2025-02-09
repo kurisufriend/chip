@@ -117,7 +117,7 @@ def disk_id():
 def diskinfo():
     return {"type": "diskinfo", "data": {"open": get_drive_status(), "title": disk_id()}}
 
-async def rip():
+async def rip(ws):
     cmd = ["whipper", "cd", "rip", "-O", "/mnt/chip/ripz/" + disk_id()]
     process = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE)
 
@@ -163,7 +163,7 @@ async def handle_drive(ws):
 
         # => we got an unripped disk.
         await ws.send(json.dumps(diskinfo()))
-        await rip()
+        await rip(ws)
 
 
 # event loop
