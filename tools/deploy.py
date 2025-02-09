@@ -35,4 +35,4 @@ with open("nodes.json", "r") as f:
     nodes = json.loads(f.read())
     for n in nodes:
         for cmd in manifest:
-            os.system(f"ssh root@{n['ipv6']} \"f{cmd}\"")
+            os.system(f"ssh root@{n['ipv4']} \"f{cmd}\"")
