@@ -45,7 +45,6 @@ os.system("apt install -y sshpass")
 # generate new keys & copy to chip@alexandria
 os.system("ssh-keygen -f /root/.ssh/$(hostname)-whoreslayer-node -t ed25519")
 os.system("sshpass -e ssh-copy-id -i /root/.ssh/$(hostname)-whoreslayer-node chip@alexandria.wuvt.vt.edu")
-os.system("sshpass -e scp chip@alexandria.wuvt.vt.edu:/opt/chip/.ssh/chip-shared* /root/.ssh/")
 
 # clear bash_history to minimize cred leakage
 os.system("rm /root/.bash_history")
