@@ -131,6 +131,7 @@ async def rip(ws):
         if "\r" in acc:
             print(acc)
             await ws.send(json.dumps({"type": "liverip", "data": {"stdout": acc, "stderr": ""}}))
+            acc = ""
 
 
 

@@ -76,6 +76,9 @@ class serb():
         
     async def wsh_diskinfo(self, ws, message):
         self.clients[ws.remote_address]["diskinfo"] = message
+        
+    async def wsh_liverip(self, ws, message):
+        self.clients[ws.remote_address]["ripstatus"] = message
     
     async def update_fes(self):
         while True:
