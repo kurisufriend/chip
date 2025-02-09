@@ -10,7 +10,8 @@ pkgs = [
     "whipper",
     "python3", # preinstalled on deb
     "python3-websockets",
-    "sshfs"
+    "sshfs",
+    "beep"
 ]
 manifest += "apt install -y " + " ".join(pkgs)
 
@@ -20,7 +21,7 @@ manifest += "apt install -y " + " ".join(pkgs)
 manifest += "mkdir -p /mnt/chip"
 # idempotent as heck
 manifest += 'grep -q "sshfs#chip@alexandria.wuvt.vt.edu" /etc/fstab || echo "sshfs#chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip /mnt/chip fuse.sshfs defaults,noatime,reconnect,allow_other,IdentityFile=/root/.ssh/chip-shared 0 0" >> /etc/fstab'
-
+manifest += "mount /mnt/chip"
 
 # install systemd service (re-installs every time: idempotent by default)
 link = "https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/service/chip-client.service"
