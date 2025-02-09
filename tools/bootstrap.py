@@ -3,9 +3,9 @@
 import os, sys, subprocess
 
 
-if not os.getenv("CHIP_PASS"):
-    print("CHIP_PASS environment variable must be set the the password of the `chip` service user on alexandria")
-    print("try something like\nexport CHIP_PASS=\"passwd goes here\" && python3 tools/bootstrap.py")
+if not os.getenv("SSHPASS"):
+    print("SSHPASS environment variable must be set the the password of the `chip` service user on alexandria")
+    print("try something like\nexport SSHPASS=\"passwd goes here\" && python3 tools/bootstrap.py")
     sys.exit(1)
 
 # run as root
@@ -15,6 +15,7 @@ if subprocess.check_output(["whoami"]).decode("ascii").replace("\n", "") != "roo
 
 
 # install our keys
+print("installing keys...")
 os.system("mkdir -p /root/.ssh")
 os.system("echo \"\" > /root/.ssh/authorized_keys")
 for k in os.listdir("tools/keys"):
@@ -27,6 +28,7 @@ def notsed(file, old, new):
         with open(file, "w") as fw:
             fw.write(fr.read().replace(old, new))
 
+print("enabling root ssh & disabling password auth...")
 # enable root ssh
 notsed("/etc/ssh/sshd_config", "#PermitRootLogin prohibit-password", "PermitRootLogin prohibit-password")
 
@@ -38,7 +40,7 @@ os.system("systemctl restart sshd")
 
 
 # fetch chip/alexandria keypair
-os.system("scp chip@alexandria.wuvt.vt.edu:/opt/chip/.ssh/chip-shared* /root/.ssh/")
+os.system("sshpass -e scp chip@alexandria.wuvt.vt.edu:/opt/chip/.ssh/chip-shared* /root/.ssh/")
 
 # clear bash_history to minimize cred leakage
 os.system("rm /root/.bash_history")
