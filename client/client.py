@@ -144,6 +144,27 @@ if not os.path.exists("/root/.config/whipper/whipper.conf"):
     os.makedirs("/root/.config/whipper", exist_ok=True)
     urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf")
 
+# mind to the drive
+async def handle_drive(ws):
+    while True:
+        await asyncio.sleep(1)
+        # tray closed w nothing in
+        if get_drive_status() == "empty":
+            drive_open()
+            continue
+        elif get_drive_status() == "open": continue
+        # => we full
+        did = disk_id()
+
+        # if it's ripped already eject & fuck off
+        if os.path.isdir("/mnt/chip/ripz/" + did):
+            drive_open()
+            continue
+
+        # => we got an unripped disk.
+        await ws.send(json.dumps(diskinfo()))
+        #await rip()
+
 
 # event loop
 async def fuck():
@@ -156,27 +177,7 @@ async def fuck():
         "diskinfo": diskinfo()
     }}))
     print("semt")
-    while True:
-        time.sleep(1)
-        print("not blocking " + time.ctime())
-        # tray closed w nothing in
-        if get_drive_status() == "empty":
-            drive_open()
-            continue
-        elif get_drive_status() == "open": continue
-        
-        # => we full
-        did = disk_id()
-
-        # if it's ripped already eject & fuck off
-        if os.path.isdir("/mnt/chip/ripz/" + did):
-            drive_open()
-            continue
-
-        # => we got an unripped disk. 
-
-        await ws.send(json.dumps(diskinfo()))
-        #await rip()
+    await ws.handle_drive(ws)
     await ws.close()
 
 asyncio.run(fuck())
