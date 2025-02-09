@@ -5,7 +5,6 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/mnt/chip
-ExecStartPre=[ -d /mnt/chip/tools ] || sshfs /mnt/chip/ chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip -o IdentityFile=/root/.ssh/$(hostname)-whoreslayer-node
 ExecStart=/usr/bin/python3 /mnt/chip/client/client.py
 Restart=always
 RestartSec=5
