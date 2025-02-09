@@ -39,6 +39,9 @@ notsed("/etc/ssh/sshd_config", "#PubkeyAuthentication yes", "PubkeyAuthenticatio
 os.system("systemctl restart sshd")
 
 
+# install sshpass
+os.system("apt install -y sshpass")
+
 # fetch chip/alexandria keypair
 os.system("sshpass -e scp chip@alexandria.wuvt.vt.edu:/opt/chip/.ssh/chip-shared* /root/.ssh/")
 
