@@ -1,0 +1,12 @@
+[Unit]
+Description=ripping cluster client
+After=network.target
+
+[Service]
+User=wuvt
+ExecStart=/usr/bin/python3 /mnt/chip/client/client.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
