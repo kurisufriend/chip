@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 User=wuvt
+WorkingDirectory=/mnt/chip
 ExecStart=/usr/bin/python3 /mnt/chip/client/client.py
 Restart=always
 RestartSec=5

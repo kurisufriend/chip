@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 User=chip
+WorkingDirectory=/tank/archive/rips/chip
 ExecStart=/usr/bin/python3 /tank/archive/rips/chip/serb/serb.py
 Restart=always
 RestartSec=5

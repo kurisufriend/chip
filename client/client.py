@@ -114,7 +114,7 @@ def diskinfo():
     return {"type": "diskinfo", "data": {"open": get_drive_status(), "title": disk_id()}}
 
 async def rip():
-    cmd = ["whipper", "cd", "rip", "-O", "ripz/" + disk_id()]
+    cmd = ["whipper", "cd", "rip", "-O", "/mnt/chip/ripz/" + disk_id()]
     process = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE)
 
     acc = ""
@@ -136,9 +136,9 @@ with open("cfg.json", "r") as f:
     cfg = json.loads(f.read())
 
 # assert whipper cfg exists
-#if not os.path.exists("/home/wuvt/.config/whipper/whipper.conf"):
-#    os.makedirs("/home/wuvt/.config/whipper", exist_ok=True)
-#    urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf")
+if not os.path.exists("/home/wuvt/.config/whipper/whipper.conf"):
+    os.makedirs("/home/wuvt/.config/whipper", exist_ok=True)
+    urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf")
 
 
 # event loop
@@ -164,7 +164,7 @@ async def fuck():
         did = disk_id()
 
         # if it's ripped already eject & fuck off
-        if os.path.isdir("/home/wuvt/rsk/repos/chip/ripz/" + did):
+        if os.path.isdir("/mnt/chip/ripz/" + did):
             drive_open()
             continue
 
