@@ -17,12 +17,12 @@ pkgs = [
 manifest.append("apt install -y " + " ".join(pkgs))
 
 
-# add sshfs mount to /etc/fstab
+# add sshfs mount to <strike>/etc/fstab</strike> crontab
 
 manifest.append("mkdir -p /mnt/chip")
 # idempotent as heck
-manifest.append('grep -q "sshfs#chip@alexandria.wuvt.vt.edu" /etc/fstab || echo "sshfs#chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip /mnt/chip fuse.sshfs defaults,noatime,reconnect,allow_other,IdentityFile=/root/.ssh/chip-shared 0 0" >> /etc/fstab')
-manifest.append("mount /mnt/chip")
+manifest.append("(crontab -l ; echo \"@reboot sshfs /mnt/chip/ chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip\") | crontab -")
+manifest.append("(crontab -l ; echo \"*/1 * * * * if [ ! -d /mnt/chip/tools ]; then sshfs /mnt/chip/ chip@alexandria.wuvt.vt.edu:/tank/archive/rips/chip; fi\") | crontab -")
 
 # install systemd service (re-installs every time: idempotent by default)
 link = "https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/service/chip-client.service"
