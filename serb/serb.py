@@ -94,6 +94,7 @@ class serb():
                     "hostname": client["hostname"],
                     "diskinfo": client["diskinfo"],
                     "ripstatus": client["ripstatus"],
+                    "songtitle": client["songtitle"]
                 }
                 package["data"].append(res)
             for fek in self.fes.keys():
