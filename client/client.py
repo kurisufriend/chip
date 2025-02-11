@@ -143,7 +143,7 @@ async def rip(ws):
 
 
 # pull chip cfg
-with open("/mnt/chip/cfg.json", "r") as f
+with open("/mnt/chip/cfg.json", "r") as f:
     cfg = json.loads(f.read())
 
 # assert whipper cfg exists
