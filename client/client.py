@@ -131,6 +131,7 @@ async def rip(ws):
             break
         acc += newc.decode("latin-1")
         if "\r" in acc:
+            print(acc.encode("ascii"))
             acc = acc.strip()
             if acc == "": continue # don't blank out rip status! whipper sends newlines sometimes.
                                    # god only knows why.
