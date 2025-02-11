@@ -131,12 +131,13 @@ async def rip(ws):
             break
         acc += newc.decode("latin-1")
         if "\r" in acc:
-            print("\""+acc+"\"")
             acc = acc.strip()
             if acc == "": continue # don't blank out rip status! whipper sends newlines sometimes.
                                    # god only knows why.
-            if acc.startswith("Title"):
-                await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": acc}}))
+            if "Title:" in acc:
+                print(acc.encode("ascii"))
+                
+                #await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": acc}}))
             await ws.send(json.dumps({"type": "liverip", "data": {"stdout": acc, "stderr": ""}}))
             acc = ""
 
