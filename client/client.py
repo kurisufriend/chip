@@ -121,6 +121,8 @@ async def rip(ws):
     cmd = ["whipper", "cd", "rip", "--cdr", "-U", "-O", "/mnt/chip/ripz/" + disk_id()]
     process = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE)
 
+    await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "not sure yet..."}}))
+
     acc = ""
     while not process.stdout.at_eof():
         newc = await process.stdout.read(1)
@@ -130,13 +132,18 @@ async def rip(ws):
         acc += newc.decode("latin-1")
         if "\r" in acc:
             print(acc)
+            acc = acc.strip()
+            if acc == "": continue # don't blank out rip status! whipper sends newlines sometimes.
+                                   # god only knows why.
+            if acc.startswith("Title"):
+                await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": acc}}))
             await ws.send(json.dumps({"type": "liverip", "data": {"stdout": acc, "stderr": ""}}))
             acc = ""
 
 
 
 # pull chip cfg
-with open("/mnt/chip/cfg.json", "r") as f:
+with open("/mnt/chip/cfg.json", "r") as f
     cfg = json.loads(f.read())
 
 # assert whipper cfg exists
@@ -148,12 +155,15 @@ if not os.path.exists("/root/.config/whipper/whipper.conf"):
 async def handle_drive(ws):
     while True:
         await ws.send(json.dumps(diskinfo()))
-        await asyncio.sleep(1)
+        await asyncio.sleep(5)
         # tray closed w nothing in
         if get_drive_status() == "empty":
             drive_open()
+            await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "no disk"}}))
             continue
-        elif get_drive_status() == "open": continue
+        elif get_drive_status() == "open":
+            await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "no disk"}}))
+            continue
         # => we full
         did = disk_id()
 

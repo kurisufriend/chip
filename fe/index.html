@@ -32,6 +32,19 @@ backend = "ws://alexandria.wuvt.vt.edu:1337"
 
 let ws = new WebSocket(backend)
 
+const nodes = {
+    "sweeneytodd": "1",
+    "williamafton": "2",
+    "patrickbateman": "3",
+    "lightyagami": "6",
+    "victorzsasz": "10",
+    "hanniballecter": "11",
+    "jasonvoorhess": "13",
+    "michaelmeyers": "17",
+    "carcer": "4",
+    "saya": "8"
+}
+
 ws.addEventListener('open', (event) => {
     console.log('connected');
     ws.send(JSON.stringify(
@@ -48,10 +61,11 @@ ws.addEventListener('message', (event) => {
     if (j["type"] == "state")
     {
         const nodes = j.data.map((node) => ({
-            id: 0,
+            id: nodes[node.hostname] || "?",
             hostname: node.hostname,
             tray_status: node.diskinfo.data.open,
             barcode: node.diskinfo.data.title,
+            song_title: node.songtitle,
             rip_status: node.ripstatus,
         }));
 
@@ -75,6 +89,7 @@ function updateTable(data) {
 <th>hostname</th>\
 <th>tray status</th>\
 <th>barcode</th>\
+<th>song title</th>\
 <th>rip status</th>\
 </tr>';
 
@@ -92,6 +107,9 @@ function updateTable(data) {
 
         let barcode = row.insertCell();
         barcode.textContent = node['barcode'];
+
+        let song_title = row.insertCell();
+        song_title.textContent = node['song_title'];
 
         let rip_status = row.insertCell();
         rip_status.textContent = node['rip_status'];

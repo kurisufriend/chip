@@ -70,12 +70,16 @@ class serb():
         self.clients[ws.remote_address]["diskinfo"] = message["data"]["diskinfo"]
         self.clients[ws.remote_address]["ws"] = ws
         self.clients[ws.remote_address]["ripstatus"] = "..."
+        self.clients[ws.remote_address]["songtitle"] = "..."
 
     async def wsh_checkin_fe(self, ws, message):
         self.fes[ws.remote_address] = {"yay": "louder", "ws": ws}
         
     async def wsh_diskinfo(self, ws, message):
         self.clients[ws.remote_address]["diskinfo"] = message
+        
+    async def wsh_songtitle(self, ws, message):
+        self.clients[ws.remote_address]["songtitle"] = message["data"]["songtitle"]
         
     async def wsh_liverip(self, ws, message):
         self.clients[ws.remote_address]["ripstatus"] = message["data"]["stdout"]
