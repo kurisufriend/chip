@@ -32,7 +32,7 @@ backend = "ws://alexandria.wuvt.vt.edu:1337"
 
 let ws = new WebSocket(backend)
 
-const nodes = {
+const nodes_pos = {
     "sweeneytodd": "1",
     "williamafton": "2",
     "patrickbateman": "3",
@@ -61,7 +61,7 @@ ws.addEventListener('message', (event) => {
     if (j["type"] == "state")
     {
         const nodes = j.data.map((node) => ({
-            id: nodes[node.hostname] || "?",
+            id: nodes_pos[node.hostname] || "?",
             hostname: node.hostname,
             tray_status: node.diskinfo.data.open,
             barcode: node.diskinfo.data.title,
