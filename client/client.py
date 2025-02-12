@@ -135,9 +135,8 @@ async def rip(ws):
             acc = acc.strip()
             if acc == "": continue # don't blank out rip status! whipper sends newlines sometimes.
                                    # god only knows why.
-            if "Title:" in acc:
-                print("AAAAAAAAAAAAAAAAAAAAAAAAUGHHHHHHHHHHHHHHHHHHHHHHHH")
-                tit = [i for i in acc.split("\n") if "Title:" in i][0]
+            if "Title" in acc:
+                tit = [i for i in acc.split("\n") if "Title" in i][0]
                 
                 await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": tit}}))
             await ws.send(json.dumps({"type": "liverip", "data": {"stdout": acc, "stderr": ""}}))
