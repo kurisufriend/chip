@@ -3,11 +3,6 @@
 import os, sys, subprocess
 
 
-if not os.getenv("SSHPASS"):
-    print("SSHPASS environment variable must be set the the password of the `chip` service user on alexandria")
-    print("try something like\nexport SSHPASS=\"passwd goes here\" && python3 tools/bootstrap.py")
-    sys.exit(1)
-
 # run as root
 if subprocess.check_output(["whoami"]).decode("ascii").replace("\n", "") != "root":
     print("run as root")
@@ -39,12 +34,10 @@ notsed("/etc/ssh/sshd_config", "#PubkeyAuthentication yes", "PubkeyAuthenticatio
 os.system("systemctl restart sshd")
 
 
-# install sshpass
-os.system("apt install -y sshpass")
-
 # generate new keys & copy to chip@alexandria
 os.system("ssh-keygen -f /root/.ssh/$(hostname)-whoreslayer-node -t ed25519")
-os.system("sshpass -e ssh-copy-id -i /root/.ssh/$(hostname)-whoreslayer-node chip@alexandria.wuvt.vt.edu")
+os.system("ssh-copy-id -i /root/.ssh/$(hostname)-whoreslayer-node chip@alexandria.wuvt.vt.edu")
+os.system("ssh-keyscan -t ed25519 alexandria.wuvt.vt.edu >> /root/.ssh/known_hosts")
 
 # clear bash_history to minimize cred leakage
 os.system("rm /root/.bash_history")

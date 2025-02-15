@@ -117,21 +117,31 @@ def disk_id():
 def diskinfo():
     return {"type": "diskinfo", "data": {"open": get_drive_status(), "title": disk_id()}}
 
-async def rip():
-    cmd = ["whipper", "cd", "rip", "-O", "/mnt/chip/ripz/" + disk_id()]
+async def rip(ws):
+    cmd = ["whipper", "cd", "rip", "--cdr", "-U", "-O", "/mnt/chip/ripz/" + disk_id()]
     process = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE)
 
+    await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "not sure yet..."}}))
+    await ws.send(json.dumps(diskinfo()))
+    
     acc = ""
     while not process.stdout.at_eof():
         newc = await process.stdout.read(1)
-        time.sleep(.01)
+        await asyncio.sleep(.01)
         if not newc:
             break
         acc += newc.decode("latin-1")
         if "\r" in acc:
             print(acc)
-            acc = ""
+            acc = acc.strip()
+            if acc == "": continue # don't blank out rip status! whipper sends newlines sometimes.
+                                   # god only knows why.
+            if "Title" in acc:
+                tit = [i for i in acc.split("\n") if "Title" in i][0]
+                
+                await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": tit}}))
             await ws.send(json.dumps({"type": "liverip", "data": {"stdout": acc, "stderr": ""}}))
+            acc = ""
 
 
 
@@ -142,28 +152,22 @@ with open("/mnt/chip/cfg.json", "r") as f:
 # assert whipper cfg exists
 if not os.path.exists("/root/.config/whipper/whipper.conf"):
     os.makedirs("/root/.config/whipper", exist_ok=True)
-    urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf")
+    urllib.request.urlretrieve("https://raw.githubusercontent.com/kurisufriend/chip/refs/heads/master/tools/whipper/whipper.conf", filename="/root/.config/whipper/whipper.conf")
 
-
-# event loop
-async def fuck():
-    # checkin
-    ws = await websockets.connect("ws://"+cfg["master-fqdn"]+":"+str(cfg["master-ws-port"]))
-    hostname = subprocess.check_output("hostname", shell=True).decode("latin-1").strip()
-    await ws.send(json.dumps({"type": "checkin/client", "data": {
-        "hostname": hostname,
-        "meta": "",
-        "diskinfo": diskinfo()
-    }}))
-    print("semt")
+# mind to the drive
+async def handle_drive(ws):
     while True:
-        time.sleep(1)
+        await ws.send(json.dumps(diskinfo()))
+        await asyncio.sleep(5)
         # tray closed w nothing in
         if get_drive_status() == "empty":
             drive_open()
+            await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "no disk"}}))
             continue
-        elif get_drive_status() == "open": continue
-        
+        elif get_drive_status() == "open":
+            await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "no disk"}}))
+            await ws.send(json.dumps({"type": "liverip", "data": {"stdout": "", "stderr": ""}}))
+            continue
         # => we full
         did = disk_id()
 
@@ -172,10 +176,22 @@ async def fuck():
             drive_open()
             continue
 
-        # => we got an unripped disk. 
+        # => we got an unripped disk.
+        await rip(ws)
 
-        await ws.send(json.dumps(diskinfo()))
-        #await rip()
+
+# event loop
+async def fuck():
+    # checkin
+    ws = await websockets.connect("ws://"+cfg["master-fqdn"]+":"+str(cfg["master-ws-port"]), ping_timeout=40, close_timeout=60)
+    hostname = subprocess.check_output("hostname", shell=True).decode("latin-1").strip()
+    await ws.send(json.dumps({"type": "checkin/client", "data": {
+        "hostname": hostname,
+        "meta": "",
+        "diskinfo": diskinfo()
+    }}))
+    print("semt")
+    await handle_drive(ws)
     await ws.close()
 
 asyncio.run(fuck())
