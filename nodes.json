@@ -2,5 +2,33 @@
     {
         "host": "saya",
         "ipv4": "192.168.10.103"
+    },
+    {
+        "host": "sweeneytodd",
+        "ipv4": "192.168.10.112"
+    },
+    {
+        "host": "williamafton",
+        "ipv4": "192.168.10.114"
+    },
+    {
+        "host": "patrickbateman",
+        "ipv4": "192.168.10.143"
+    },
+    {
+        "host": "lightyagami",
+        "ipv4": "192.168.10.100"
+    },
+    {
+        "host": "victorzsasz",
+        "ipv4": "192.168.10.122"
+    },
+    {
+        "host": "hanniballecter",
+        "ipv4": "192.168.10.108"
+    },
+    {
+        "host": "michaelmeyers",
+        "ipv4": "192.168.10.87"
     }
 ]
