@@ -12,4 +12,5 @@ with open("nodes.json", "r") as f:
     os.system(f"ssh root@{nodes[0]['ipv4']} \"{runonce}\"")
     for n in nodes:
         for cmd in manifest:
+            print(n["host"] + ":" + cmd)
             os.system(f"ssh root@{n['ipv4']} \"{cmd}\"")
