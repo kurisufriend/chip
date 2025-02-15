@@ -165,6 +165,7 @@ async def handle_drive(ws):
             continue
         elif get_drive_status() == "open":
             await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "no disk"}}))
+            await ws.send(json.dumps({"type": "liverip", "data": {"stdout": "", "stderr": ""}}))
             continue
         # => we full
         did = disk_id()
