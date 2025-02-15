@@ -122,7 +122,8 @@ async def rip(ws):
     process = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE)
 
     await ws.send(json.dumps({"type": "songtitle", "data": {"songtitle": "not sure yet..."}}))
-
+    await ws.send(json.dumps(diskinfo()))
+    
     acc = ""
     while not process.stdout.at_eof():
         newc = await process.stdout.read(1)
