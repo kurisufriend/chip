@@ -3,7 +3,5 @@ appropriate semi-correct documentation may or may not be in the (quite sizeable)
 
 
 werking notez:
-- idk how to nfs mount alex. idk if i even can. def can't sshfs outside my homedir and
-   dept/it. bother emachine for root and/or passwd for user `ripperjack'.
 - todo
-   - swap whipper.conf loc to github repo
+   - swap kurisufriend/chip pulls to wuvt/chip
